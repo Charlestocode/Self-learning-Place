@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Presentation for the Answers</title>
+</head>
+<body>
+    <h1>JavaScript Test</h1>
+
+    <h3>1. Count Employees Number by Factory</h3>
+    <button onclick="numberOfEmployeesByFactory(factories)">Show Number of Employees in Facotory</button>
+    <p id="answer1"></p>
+
+    <h3>2. Count Factories Number by Employee</h3>
+    <button onclick="numberOfFactoryByEmployee(factories)">Show Number of Factories By Employee</button>
+    <p id="answer2"></p>
+
+    <h3>3. Order employees list by alphabetical order</h3>
+    <button onclick="sortEmployeeByAlphabet(factories)">Sort Employees Alphabetically</button>
+    <p id="answer3"></p>
+
+    <h3>4. Count total hours worked in 1 day ?</h3>
+    <button onclick="totalWorkHoursOfAllEmployeesPerDay(employees)">Show Total Work Hours</button>
+    <p id="answer4"></p>
+
+    <h3>5. Make a function that take as parameters dayTime and return number of employee working</h3>
+    Hour: <input type="number" id="hour" min="0" max="23">
+    Minute: <input type="number" id="minute" min="0" max="59">
+    Second: <input type="number" id="second" min="0" max="59">
+    <br><br>
+    <button onclick="getDayTime(); howManyEmployeesByTime(employees)">Show Number of Employees Working</button>
+    <p id="answer5"></p>
+
+    <h3>6. How many days of work needed to done all tasks ?</h3>
+    <button onclick="numberOfDaysToFinish(tasks)">Show Number of Days to Finish</button>
+    <p id="answer6"></p>
+
+    <script src = "JSTest.js"></script>
+</body>
+</html>
