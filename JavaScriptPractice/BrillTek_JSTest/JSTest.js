@@ -62,7 +62,7 @@ function numberOfEmployeesByFactory(factories) {
         numberOfEmployeesByFactory[fact] = factoryInfo;
     }
 
-    text = "";
+    let text = "";
     for (let factoryInfo of numberOfEmployeesByFactory) {
         text = text + JSON.stringify(factoryInfo) + "<br>"; 
     }
@@ -117,8 +117,8 @@ function sortEmployeeByAlphabet(factories) {
 
 
 // 4.
-// Suppose we calculate the tatal work hours of all employees',
-// that is, summing up all employees' work hous.
+// Suppose we calculate the tatal work hours of all employees,
+// that is, summing up all employees' work hours.
 function totalWorkHoursOfAllEmployeesPerDay(employees) {
     let workHours = 0;
     for (let employee of employees) {
@@ -179,11 +179,13 @@ function getDayTime() {
     let inputMinute = String(document.getElementById("minute").value);
     let inputSecond = String(document.getElementById("second").value);
     // Adjust the time value to the appropriate format.
-    if (inputHour != undefined && inputMinute != undefined && inputSecond != undefined) {
+    if (inputHour != "" && inputMinute != "" && inputSecond != "") {
         if (inputHour < 10) {inputHour = "0" + inputHour;}
         if (inputMinute < 10) {inputMinute = "0" + inputMinute;}
         if (inputSecond < 10) {inputSecond = "0" + inputSecond;}
         return inputHour + ":" + inputMinute + ":" + inputSecond;
+    } else {
+        return ;
     }
 }
 
