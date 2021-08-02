@@ -122,7 +122,7 @@ function sortEmployeeByAlphabet(factories) {
 function totalWorkHoursOfAllEmployeesPerDay(employees) {
     let workHours = 0;
     for (let employee of employees) {
-        let [beginHour, endHour] = getBeginHourAndEndHour(employee);
+        let [beginHour, endHour] = getBeginTimeAndEndTime(employee);
         workHours = workHours + (endHour - beginHour);
     }
     document.getElementById("answer4").innerHTML = "Total work hours per day: " + workHours + " hours per day";
@@ -134,14 +134,60 @@ function totalWorkHoursOfAllEmployeesPerDay(employees) {
 function howManyEmployeesByTime(employees) {
     const dayTime = getDayTime();
     const inputHour = dayTime.slice(0, 2);
-    // Now, it is no need to use minute and second data, so skip it.
+    const inputMinute = dayTime.slice(3, 5);
+    const inputSecond = dayTime.slice(6, 8);
     
     // Calculate how many employees are working.
     let numberOfEmployeesWorking = 0;
     for (let employee of employees) {
-        let [beginHour, endHour] = getBeginHourAndEndHour(employee);
-        if (inputHour >= beginHour && inputHour <= endHour) {
+        let [beginHour, endHour, beginMinute, endMinute, beginSecond, endSecond] = getBeginTimeAndEndTime(employee);
+
+
+        // Case 1: When inputHour is between beginHour and endHour, it must be at work time.
+        if (inputHour > beginHour && inputHour < endHour) {
             ++numberOfEmployeesWorking;
+
+            // Case 2: When inputHour is equal to beginHour
+        } else if(inputHour >= beginHour && inputHour < endHour) {
+            // 2.a: and inputMinute is larger than beginMinute, it must be at work time.
+            if (inputMinute > beginMinute) {
+                ++numberOfEmployeesWorking;
+                // 2.b: , inputMinute is equal to beginMinute ,and inputSecond is larger than 
+                // beginSecond, it must be at work time.
+            } else if (inputMinute == beginMinute && inputSecond >= beginSecond) {
+                ++numberOfEmployeesWorking;
+            }
+
+            // Case 3: When inputHour is equal to endHour
+        } else if (inputHour > beginHour && inputHour <= endHour) {
+            // 3.a: and inputMinute is less than endMinute, it must be at work time.
+            if (inputMinute < endMinute) {
+                ++numberOfEmployeesWorking;
+                // 3.b: , inputMinute is equal to beginMinute ,and inputSecond is less than 
+                // endSecond, it must be at work time.
+            } else if (inputMinute == endMinute && inputSecond <= endSecond) {
+                ++numberOfEmployeesWorking;
+            }
+
+            // Case 4: When inputHour is equal to beginHour and endHour
+        } else if (inputHour == beginHour && inputHour == endHour) {
+            // 4.a: , and inputMinute is between eginMinute and endMinute, it must be at work time.
+            if (inputMinute > beginMinute && inputMinute < endMinute) {
+                ++numberOfEmployeesWorking;
+                // 4.b: , and inputMinute is equal to beginMinute, plus inputSecond is larger than beginSecond,
+                // it must be at work time.
+            } else if (inputMinute >= beginMinute && inputMinute < beginMinute && inputSecond >= beginSecond) {
+                ++numberOfEmployeesWorking;
+                // 4.c: , and inputMinute is equal to endMinute, plus inputSecond is less than endSecond,
+                // it must be at work time.
+            } else if (inputMinute > beginMinute && inputMinute <= endMinute && inputSecond <= endSecond) {
+                ++numberOfEmployeesWorking;
+                // 4.d: , and inputMinute is equal to beginMinte and endMinute, plus inputSecond is 
+                // between beginSecond and endSecond, it must be at work time.
+            } else if (inputMinute == beginMinute && inputMinute == endMinute && 
+                inputSecond >= beginSecond && inputSecond <= endSecond) {
+                    ++numberOfEmployeesWorking;
+                }
         }
     }
 
@@ -190,17 +236,22 @@ function getDayTime() {
 }
 
 
-// Get the start hour and the end hour of the specific employee.
-function getBeginHourAndEndHour(employee) {
+// Get the start hour, minute, second and the end hour, minute, second of the specific employee.
+function getBeginTimeAndEndTime(employee) {
     // Get each employee's job type.
     let jobType = employee.type;
-    let beginHour, endHour;
+    let beginHour, endHour, beginMinute, endMinute, beginSecond, endSecond;
 
     // Find what kind of job the employee get.
     for (let employeeType of employeeTypes) {
         if (jobType == employeeType.id) {
             beginHour = Number(employeeType.work_begin.slice(0, 2));
             endHour = Number(employeeType.work_end.slice(0, 2));
+            beginMinute = Number(employeeType.work_begin.slice(3, 5));
+            endMinute = Number(employeeType.work_end.slice(3, 5));
+            beginSecond = Number(employeeType.work_begin.slice(6, 8));
+            endSecond = Number(employeeType.work_end.slice(6, 8));
+
             // Change the hour value into 24 when work_end's hour is 0.
             if (endHour == 0) {
                 endHour = 24;
@@ -208,5 +259,5 @@ function getBeginHourAndEndHour(employee) {
             break;
         }
     }
-    return [beginHour, endHour];
+    return [beginHour, endHour, beginMinute, endMinute, beginSecond, endSecond];
 }
